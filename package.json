@@ -16,7 +16,23 @@
     "deploy-gh-pages": "gh-pages -d build"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "semi": [
+        "warn",
+        "always"
+      ],
+      "quotes": [
+        "warn",
+        "double"
+      ],
+      "camelcase": [
+        "warn"
+      ]
+    }
   },
   "browserslist": [
     ">0.2%",
