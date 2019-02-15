@@ -1,0 +1,21 @@
+.App {
+  height: 100%;
+}
+
+.App > * {
+  vertical-align: top;
+}
+
+.map,
+.points-section {
+  display: inline-block;
+}
+
+.points-section {
+  width: 150px;
+}
+
+.map {
+  width: calc(100% - 150px);
+  height: 100%;
+}
