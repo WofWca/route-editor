@@ -9,6 +9,8 @@ class App extends Component {
       newPointName: "",
       points: []
     };
+    this.map = null;
+    this.nextPointId = 1;
   }
   render() {
     return (
@@ -26,8 +28,9 @@ class App extends Component {
             />
           </form>
           <ol className="points-list">
-            <li>Point1</li>
-            <li>Point2</li>
+            {this.state.points.map((point) => (
+              <li key={point.id}>{point.name}</li>
+            ))}
           </ol>
         </div>
         <div id="map" className="map"></div>
@@ -36,22 +39,61 @@ class App extends Component {
   }
 
   componentDidMount() {
-    ymaps.ready(init);
-    function init() {
-      var myMap = new ymaps.Map("map", {
+    const ymapsInit = () => {
+      this.map = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 10
       });
-    }
+    };
+    ymaps.ready(ymapsInit);
+    this.mapDrawPoints();
   }
 
   handleNewPointSubmit = (event) => {
     event.preventDefault();
-    // TODO
-    console.log(this.state.newPointName);
+
+    this.setState((state, props) => {
+      let newStatePoints = state.points.slice();
+      const newPointId = this.nextPointId;
+      this.nextPointId++;
+      newStatePoints.push(
+        {
+          id: newPointId,
+          name: this.state.newPointName,
+          coordinates: this.map.getCenter() //TODO
+        }
+      );
+      return { points: newStatePoints, newPointName: "" };
+    });
   }
+
   handleNewPointNameChange = (event) => {
     this.setState({ newPointName: event.target.value });
+  }
+
+  mapDrawPoints = () => {
+    for (let listPoint of this.state.points) {
+      let newYmapsPoint = new ymaps.GeoObject({
+        geometry: {
+          type: "Point",
+          coordinates: listPoint.coordinates
+        },
+        properties: {
+          hintContent: ""
+        }
+      }, { draggable: true }
+      );
+      this.map.geoObjects.add(newYmapsPoint);
+    }
+  }
+
+  mapClearPoints = () => {
+    this.map.geoObjects.removeAll();
+  }
+
+  componentDidUpdate () {
+    this.mapClearPoints();
+    this.mapDrawPoints();
   }
 }
 
