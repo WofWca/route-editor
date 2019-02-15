@@ -7,12 +7,26 @@
 }
 
 .map,
-.points-section {
+.points-editor {
   display: inline-block;
 }
 
-.points-section {
+.points-editor > * {
+  margin: 5px;
+}
+
+.points-editor input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.points-editor {
   width: 150px;
+}
+
+.points-list {
+  padding-left: 0;
+  list-style-type: none;
 }
 
 .map {

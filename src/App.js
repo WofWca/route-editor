@@ -13,18 +13,19 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="points-section">
+        <div className="points-editor">
           <form onSubmit={this.handleNewPointSubmit}>
             <legend>New waypoint</legend>
             <input
               required
+              autoFocus
               type="text"
               placeholder="Name"
               value={this.state.newPointName}
               onChange={this.handleNewPointNameChange}
             />
           </form>
-          <ol>
+          <ol className="points-list">
             <li>Point1</li>
             <li>Point2</li>
           </ol>
