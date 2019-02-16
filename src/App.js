@@ -17,6 +17,7 @@ class App extends Component {
     this.map = undefined;
     this.nextPointId = 1;
     this.ymapsRouteObj = undefined;
+    this.newPointNameInput = React.createRef();
   }
   render() {
     return (
@@ -31,6 +32,7 @@ class App extends Component {
               placeholder="Name"
               value={this.state.newPointName}
               onChange={this.handleNewPointNameChange}
+              ref={this.newPointNameInput}
             />
           </form>
           <ol className="points-list">
@@ -52,6 +54,9 @@ class App extends Component {
       });
       this.ymapsRouteObj = new ymaps.Polyline([55.76, 37.64]);
       this.map.geoObjects.add(this.ymapsRouteObj);
+      this.map.events.add("actionbegin", () => {
+        this.newPointNameInput.current.focus();
+      });
     };
     ymaps.ready(ymapsInit);
   }
