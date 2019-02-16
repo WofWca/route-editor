@@ -29,6 +29,12 @@
   list-style-type: none;
 }
 
+.points-list .point {
+  background-color: #feca81;
+  margin: 4px 0px;
+  padding: 2px 4px;
+}
+
 .map {
   width: calc(100% - 150px);
   height: 100%;
