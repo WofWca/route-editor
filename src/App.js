@@ -12,7 +12,8 @@ class App extends Component {
           name,
           ymapsObj: Yandex Maps GeoObject
       } */
-      points: []
+      points: [],
+      mapReady: false
     };
     this.map = undefined;
     this.nextPointId = 1;
@@ -26,6 +27,7 @@ class App extends Component {
           <form onSubmit={this.handleNewPointSubmit}>
             <legend>New waypoint</legend>
             <input
+              disabled={!this.state.mapReady}
               required
               autoFocus
               type="text"
@@ -82,6 +84,7 @@ class App extends Component {
 
   componentDidMount() {
     const ymapsInit = () => {
+      this.setState({mapReady: true});
       this.map = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 10
