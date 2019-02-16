@@ -44,7 +44,7 @@ class App extends Component {
                 draggable
                 onDragStart={(e) => this.handlePointListItemDragStart(e, point)}
                 onDragOver={this.allowDrop}
-                onDrop={(e) => this.handlePointListItemDrop(point)}
+                onDrop={(e) => this.handlePointListItemDrop(e, point)}
                 onDragEnd={this.handlePointListItemDragEnd}
                 className="point"
               >
@@ -66,7 +66,8 @@ class App extends Component {
     event.dataTransfer.setData("text", "Stub data");
   }
 
-  handlePointListItemDrop = (dropOntoPoint) => {
+  handlePointListItemDrop = (event, dropOntoPoint) => {
+    event.preventDefault();
     if (this._draggedPoint) {
       this.setState((state, props) => {
         const newStatePoints = state.points.slice();
