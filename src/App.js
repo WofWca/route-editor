@@ -38,7 +38,7 @@ class App extends Component {
             />
           </form>
           <ol className="points-list">
-            {this.state.points.map((point) => (
+            {this.state.points.map((point, pointInd) => (
               <li
                 key={point.id}
                 draggable
@@ -47,8 +47,17 @@ class App extends Component {
                 onDrop={(e) => this.handlePointListItemDrop(e, point)}
                 onDragEnd={this.handlePointListItemDragEnd}
                 className="point"
-              >
-                {point.name}</li>
+                >
+                <span>
+                  {point.name}
+                </span>
+                <button
+                  onClick={(event) => this.removePoint(pointInd)}
+                  className="delete"
+                >
+                  X
+                  </button>
+              </li>
             ))}
           </ol>
         </div>
@@ -82,6 +91,16 @@ class App extends Component {
 
   allowDrop (event) {
     event.preventDefault();
+  }
+
+  removePoint = (pointInd) => {
+    this.setState((state, props) => {
+      const newStatePoints = state.points.slice();
+      const pointToREmove = state.points[pointInd];
+      newStatePoints.splice(pointInd, 1);
+      this.map.geoObjects.remove(pointToREmove.ymapsObj);
+      return { points: newStatePoints };
+    });
   }
 
   componentDidMount() {

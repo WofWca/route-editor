@@ -32,7 +32,16 @@
 .points-list .point {
   background-color: #feca81;
   margin: 4px 0px;
+  position: relative;
+  height: 25px;
   padding: 2px 4px;
+}
+
+.points-list .point > .delete {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  bottom: 3px;
 }
 
 .map {
