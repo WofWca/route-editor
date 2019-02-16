@@ -7,10 +7,16 @@ class App extends Component {
     super(props);
     this.state = {
       newPointName: "",
+      /* `points` item structure: {
+          id,
+          name,
+          ymapsObj: Yandex Maps GeoObject
+      } */
       points: []
     };
-    this.map = null;
+    this.map = undefined;
     this.nextPointId = 1;
+    this.ymapsRouteObj = undefined;
   }
   render() {
     return (
@@ -44,56 +50,63 @@ class App extends Component {
         center: [55.76, 37.64],
         zoom: 10
       });
+      this.ymapsRouteObj = new ymaps.Polyline([55.76, 37.64]);
+      this.map.geoObjects.add(this.ymapsRouteObj);
     };
     ymaps.ready(ymapsInit);
-    this.mapDrawPoints();
   }
 
   handleNewPointSubmit = (event) => {
     event.preventDefault();
 
+    const newPointName = this.state.newPointName;
     this.setState((state, props) => {
       let newStatePoints = state.points.slice();
       const newPointId = this.nextPointId;
       this.nextPointId++;
+      let newYmapsPoint = new ymaps.GeoObject({
+        geometry: {
+          type: "Point",
+          coordinates: this.map.getCenter()
+        },
+        properties: {
+          balloonContent: newPointName
+        }
+      }, { draggable: true }
+      );
+      newYmapsPoint.events.add("geometrychange", () => {
+        this.mapRefreshRoute();
+      });
+      this.map.geoObjects.add(newYmapsPoint);
       newStatePoints.push(
         {
           id: newPointId,
-          name: this.state.newPointName,
-          coordinates: this.map.getCenter() //TODO
+          name: newPointName,
+          ymapsObj: newYmapsPoint
         }
       );
       return { points: newStatePoints, newPointName: "" };
     });
   }
 
+mapRefreshRoute = () => {
+    const routeCoordinates = [];
+    for (let point of this.state.points) {
+      // For a point, its bounds is a 0 area rectangle.
+      let pointCoordinates = point.ymapsObj.geometry.getBounds()[0];
+      routeCoordinates.push(pointCoordinates);
+    }
+    this.ymapsRouteObj.geometry.setCoordinates(routeCoordinates);
+  }
+
   handleNewPointNameChange = (event) => {
     this.setState({ newPointName: event.target.value });
   }
 
-  mapDrawPoints = () => {
-    for (let listPoint of this.state.points) {
-      let newYmapsPoint = new ymaps.GeoObject({
-        geometry: {
-          type: "Point",
-          coordinates: listPoint.coordinates
-        },
-        properties: {
-          hintContent: ""
-        }
-      }, { draggable: true }
-      );
-      this.map.geoObjects.add(newYmapsPoint);
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    if (this.state.points !== prevState.points) {
+      this.mapRefreshRoute();
     }
-  }
-
-  mapClearPoints = () => {
-    this.map.geoObjects.removeAll();
-  }
-
-  componentDidUpdate () {
-    this.mapClearPoints();
-    this.mapDrawPoints();
   }
 }
 
