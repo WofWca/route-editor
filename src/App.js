@@ -37,13 +37,47 @@ class App extends Component {
           </form>
           <ol className="points-list">
             {this.state.points.map((point) => (
-              <li key={point.id}>{point.name}</li>
+              <li
+                key={point.id}
+                draggable
+                onDragStart={(e) => this.handlePointListItemDragStart(point)}
+                onDragOver={this.allowDrop}
+                onDrop={(e) => this.handlePointListItemDrop(point)}
+                onDragEnd={this.handlePointListItemDragEnd}
+                className="point"
+              >
+                {point.name}</li>
             ))}
           </ol>
         </div>
         <div id="map" className="map"></div>
       </div>
     );
+  }
+
+  handlePointListItemDragEnd = (event) => {
+    this._draggedPoint = null;
+  }
+
+  handlePointListItemDragStart = (draggedPoint) => {
+    this._draggedPoint = draggedPoint;
+  }
+
+  handlePointListItemDrop = (dropOntoPoint) => {
+    if (this._draggedPoint) {
+      this.setState((state, props) => {
+        const newStatePoints = state.points.slice();
+        const dropOntoPointInd = state.points.indexOf(dropOntoPoint);
+        const draggedPointInd = state.points.indexOf(this._draggedPoint);
+        newStatePoints.splice(draggedPointInd, 1);
+        newStatePoints.splice(dropOntoPointInd, 0, this._draggedPoint);
+        return { points: newStatePoints };
+      });
+    }
+  }
+
+  allowDrop (event) {
+    event.preventDefault();
   }
 
   componentDidMount() {
