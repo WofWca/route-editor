@@ -42,7 +42,7 @@ class App extends Component {
               <li
                 key={point.id}
                 draggable
-                onDragStart={(e) => this.handlePointListItemDragStart(point)}
+                onDragStart={(e) => this.handlePointListItemDragStart(e, point)}
                 onDragOver={this.allowDrop}
                 onDrop={(e) => this.handlePointListItemDrop(point)}
                 onDragEnd={this.handlePointListItemDragEnd}
@@ -61,8 +61,9 @@ class App extends Component {
     this._draggedPoint = null;
   }
 
-  handlePointListItemDragStart = (draggedPoint) => {
+  handlePointListItemDragStart = (event, draggedPoint) => {
     this._draggedPoint = draggedPoint;
+    event.dataTransfer.setData("text", "Stub data");
   }
 
   handlePointListItemDrop = (dropOntoPoint) => {
