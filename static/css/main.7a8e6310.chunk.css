@@ -1,0 +1,2 @@
+#root,body,html{height:100%;margin:0}.App{height:100%}.App>*{vertical-align:top}.map,.points-editor{display:inline-block}.points-editor>*{margin:5px}.points-editor input{box-sizing:border-box;width:100%}.points-editor{width:150px}.points-list{padding-left:0;list-style-type:none}.points-list .point{background-color:#feca81;margin:4px 0;position:relative;height:25px;padding:2px 4px}.points-list .point>.delete{position:absolute;right:3px;top:3px;bottom:3px}.map{width:calc(100% - 150px);height:100%}
+/*# sourceMappingURL=main.7a8e6310.chunk.css.map */
