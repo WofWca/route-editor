@@ -152,7 +152,7 @@ class App extends Component {
     });
   }
 
-mapRefreshRoute = () => {
+  mapRefreshRoute = () => {
     const routeCoordinates = [];
     for (let point of this.state.points) {
       // For a point, its bounds is a 0 area rectangle.
