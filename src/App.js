@@ -110,7 +110,7 @@ class App extends Component {
         center: [55.76, 37.64],
         zoom: 10
       });
-      this.ymapsRouteObj = new ymaps.Polyline([55.76, 37.64]);
+      this.ymapsRouteObj = new ymaps.Polyline([]);
       this.map.geoObjects.add(this.ymapsRouteObj);
       this.map.events.add("actionbegin", () => {
         this.newPointNameInput.current.focus();
