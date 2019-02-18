@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-const ymaps = window.ymaps;
+import ymaps from "./ymaps";
 
 class App extends Component {
   constructor (props) {
