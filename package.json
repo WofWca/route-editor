@@ -42,6 +42,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "enzyme": "^3.9.0",
     "gh-pages": "^2.0.1"
   }
 }
