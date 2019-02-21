@@ -48,7 +48,7 @@ class App extends Component {
                 onDragEnd={this.handlePointListItemDragEnd}
                 className="point"
                 >
-                <span>
+                <span className="point-name">
                   {point.name}
                 </span>
                 <button
