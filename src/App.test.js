@@ -16,23 +16,26 @@ it("renders without crashing", () => {
 
 describe("Create one point", () => {
   let newPointGeoObject;
-  let numGeoObjects;
   let mapObj;
+  let newPointNameInput;
+  let newPointNameInputForm;
   beforeAll(() => {
     jest.clearAllMocks();
     const wrapper = mount(<App />);
     mapObj = ymaps.Map.mock.instances[0];
     mapObj._setCenter([12.34, 56.78]);
-    const newPointNameInput = wrapper.find(".points-editor input");
+    newPointNameInput = wrapper.find(".points-editor input");
     newPointNameInput.simulate("change", { target: { value: "Test name" } });
-    wrapper.find(".points-editor form").simulate("submit");
-    numGeoObjects = ymaps.GeoObject.mock.instances.length;
-    newPointGeoObject = ymaps.GeoObject.mock.instances[numGeoObjects - 1];
+    newPointNameInputForm = wrapper.find(".points-editor form");
+    newPointNameInputForm.simulate("submit");
+    newPointGeoObject = ymaps.GeoObject.mock.instances.find((geoObj, ind) => {
+      return ymaps.GeoObject.mock.calls[ind][0].geometry.type === "Point";
+    });
   });
 
   it("Creates no more than two GeoObjects", () => {
     // Polyline (may be created later, when there is a second point) and the first point.
-    expect(numGeoObjects).toBeLessThanOrEqual(2);
+    expect(ymaps.GeoObject.mock.instances.length).toBeLessThanOrEqual(2);
   });
   
   it("Creates a point on form submission", () => {
