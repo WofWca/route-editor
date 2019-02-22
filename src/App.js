@@ -133,12 +133,38 @@ class App extends Component {
           coordinates: this.map.getCenter()
         },
         properties: {
-          balloonContent: newPointName
+          balloonContent: newPointName,
+          hintContent: "Loading..."
         }
       }, { draggable: true }
       );
+      function setPointAddress (ymapsPoint) {
+        return new Promise((resolve, reject) => {
+          ymaps.geocode(ymapsPoint.geometry.getBounds()[0]).then(
+            function (result) {
+              ymapsPoint.properties.set({
+                hintContent: result.geoObjects.get(0).getAddressLine()
+              });
+              resolve();
+            },
+            function (err) {
+              ymapsPoint.properties.set({
+                hintContent: "Error"
+              });
+              reject();
+            }
+          );
+        });
+      }
+      setPointAddress(newYmapsPoint);
       newYmapsPoint.events.add("geometrychange", () => {
         this.mapRefreshRoute();
+      });
+      newYmapsPoint.events.add("dragend", (e) => {
+        setPointAddress(e.get("target"));
+      });
+      newYmapsPoint.events.add("dragstart", (e) => {
+        e.get("target").properties.set({ hintContent: "Loading..." });
       });
       this.map.geoObjects.add(newYmapsPoint);
       newStatePoints.push(
