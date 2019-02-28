@@ -138,23 +138,17 @@ class App extends Component {
         }
       }, { draggable: true }
       );
-      function setPointAddress (ymapsPoint) {
-        return new Promise((resolve, reject) => {
-          ymaps.geocode(ymapsPoint.geometry.getBounds()[0]).then(
-            function (result) {
-              ymapsPoint.properties.set({
-                hintContent: result.geoObjects.get(0).getAddressLine()
-              });
-              resolve();
-            },
-            function (err) {
-              ymapsPoint.properties.set({
-                hintContent: "Error"
-              });
-              reject();
-            }
-          );
-        });
+      async function setPointAddress (ymapsPoint) {
+        try {
+          const result =  await ymaps.geocode(ymapsPoint.geometry.getBounds()[0]);
+          ymapsPoint.properties.set({
+            hintContent: result.geoObjects.get(0).getAddressLine()
+          });
+        } catch (err) {
+          ymapsPoint.properties.set({
+            hintContent: "Error"
+          });
+        }
       }
       setPointAddress(newYmapsPoint);
       newYmapsPoint.events.add("geometrychange", () => {
